@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Products - StockSense</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #eee8df;
+            color: #41473d;
+        }
+
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background: #596653;
+            color: #f7f4ed;
+            position: fixed;
+            left: 0;
+            top: 0;
+            padding: 20px 15px;
+            overflow-y: auto;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 5px 10px 25px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: #c5d0bd;
+            color: #4d5b47;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 19px;
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: bold;
+            color: #faf7f0;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 5px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 11px 12px;
+            border-radius: 8px;
+            color: #e7e5dc;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .sidebar-menu a:hover {
+            background: #657160;
+            color: #ffffff;
+        }
+
+        .sidebar-menu a.active {
+            background: #c5d0bd;
+            color: #465342;
+            font-weight: 600;
+        }
+
+        .menu-title {
+            color: #c5cabb;
+            font-size: 11px;
+            text-transform: uppercase;
+            margin: 22px 12px 9px;
+            letter-spacing: 0.7px;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            min-height: 100vh;
+        }
+
+        .topbar {
+            height: 70px;
+            background: #faf6ef;
+            border-bottom: 1px solid #d6cec1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 28px;
+        }
+
+        .page-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #41473d;
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: #c5d0bd;
+            color: #4d5b47;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
+            color: #41473d;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .user-role {
+            color: #77766d;
+            font-size: 11px;
+        }
+
+        .content {
+            padding: 28px;
+        }
+
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 22px;
+        }
+
+        .page-header h1 {
+            color: #41473d;
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .page-header p {
+            color: #77766d;
+            font-size: 13px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: #98aa8e;
+            color: #364132;
+        }
+
+        .btn-primary:hover {
+            background: #899b80;
+        }
+
+        .card {
+            background: #faf6ef;
+            border: 1px solid #d6cec1;
+            border-radius: 14px;
+            padding: 22px;
+            box-shadow: 0 5px 16px rgba(70, 65, 55, 0.06);
+            margin-bottom: 22px;
+        }
+
+        .card h2 {
+            font-size: 16px;
+            color: #4c5547;
+            margin-bottom: 18px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            color: #55584f;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 11px 13px;
+            border: 1px solid #cfc6b8;
+            border-radius: 8px;
+            background: #f1ece4;
+            color: #41473d;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #98aa8e;
+            background: #faf6ef;
+            box-shadow: 0 0 0 3px rgba(152, 170, 142, 0.15);
+        }
+
+        .table-container {
+            background: #faf6ef;
+            border: 1px solid #d6cec1;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 5px 16px rgba(70, 65, 55, 0.06);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #e1dbd1;
+        }
+
+        th {
+            padding: 13px 15px;
+            text-align: left;
+            color: #55584f;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 13px 15px;
+            border-top: 1px solid #e4ddd3;
+            color: #50544b;
+            font-size: 13px;
+        }
+
+        tbody tr:hover {
+            background: #f2ede5;
+        }
+
+        .stock-good {
+            color: #52654c;
+            font-weight: 700;
+        }
+
+        .stock-low {
+            color: #806846;
+            font-weight: 700;
+        }
+
+        .stock-out {
+            color: #825c55;
+            font-weight: 700;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 600;
+            background: #d3dfcc;
+            color: #53654d;
+        }
+
+        .alert {
+            padding: 12px 14px;
+            border-radius: 9px;
+            margin-bottom: 15px;
+            font-size: 13px;
+            background: #ead5d1;
+            color: #805952;
+            border: 1px solid #dbc0bb;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 40px 20px;
+            color: #858278;
+            font-size: 13px;
+        }
+
+        @media (max-width: 900px) {
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .page-header {
+                align-items: flex-start;
+                gap: 15px;
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 700px) {
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .content {
+                padding: 20px 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="sidebar">
+
+    <div class="logo-section">
+        <div class="logo-icon">S</div>
+        <div class="logo-text">StockSense</div>
+    </div>
+
+    <ul class="sidebar-menu">
+
+        <li>
+            <a href="{{ url_for('dashboard') }}">
+                📊 Dashboard
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('products') }}" class="active">
+                📦 Products
+            </a>
+        </li>
+
+        <div class="menu-title">Operations</div>
+
+        <li>
+            <a href="{{ url_for('receipts') }}">
+                📥 Receipts
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('deliveries') }}">
+                📤 Delivery Orders
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('transfers') }}">
+                🔄 Internal Transfers
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('adjustments') }}">
+                📝 Inventory Adjustment
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('ledger') }}">
+                📚 Move History
+            </a>
+        </li>
+
+        <div class="menu-title">Management</div>
+
+        <li>
+            <a href="{{ url_for('warehouses') }}">
+                🏭 Warehouses
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('settings') }}">
+                ⚙️ Settings
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('profile') }}">
+                👤 My Profile
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('logout') }}">
+                🚪 Logout
+            </a>
+        </li>
+
+    </ul>
+
+</div>
+
+<div class="main-content">
+
+    <div class="topbar">
+
+        <div class="page-title">
+            Products
+        </div>
+
+        <div class="user-section">
+
+            <div class="user-avatar">
+                {{ session.get('user_name', 'A')[0]|upper }}
+            </div>
+
+            <div class="user-info">
+
+                <div class="user-name">
+                    {{ session.get('user_name', 'Admin') }}
+                </div>
+
+                <div class="user-role">
+                    {{ session.get('user_role', 'Inventory Manager') }}
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="content">
+
+        <div class="page-header">
+
+            <div>
+                <h1>Products</h1>
+
+                <p>
+                    Manage products, stock levels and reorder rules.
+                </p>
+            </div>
+
+        </div>
+
+        {% with messages = get_flashed_messages() %}
+
+            {% if messages %}
+
+                {% for message in messages %}
+
+                    <div class="alert">
+                        {{ message }}
+                    </div>
+
+                {% endfor %}
+
+            {% endif %}
+
+        {% endwith %}
+
+        <div class="card">
+
+            <h2>Add New Product</h2>
+
+            <form method="POST" action="{{ url_for('products') }}">
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label for="name">
+                            Product Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            placeholder="Enter product name"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="sku">
+                            SKU / Code
+                        </label>
+
+                        <input
+                            type="text"
+                            id="sku"
+                            name="sku"
+                            placeholder="Enter SKU"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label for="category">
+                            Category
+                        </label>
+
+                        <input
+                            type="text"
+                            id="category"
+                            name="category"
+                            placeholder="Enter category"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="unit">
+                            Unit of Measure
+                        </label>
+
+                        <input
+                            type="text"
+                            id="unit"
+                            name="unit"
+                            placeholder="Example: kg, pcs, box"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label for="stock">
+                            Initial Stock
+                        </label>
+
+                        <input
+                            type="number"
+                            step="0.01"
+                            min="0"
+                            id="stock"
+                            name="stock"
+                            value="0"
+                        >
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="reorder_level">
+                            Reorder Level
+                        </label>
+
+                        <input
+                            type="number"
+                            step="0.01"
+                            min="0"
+                            id="reorder_level"
+                            name="reorder_level"
+                            value="10"
+                        >
+
+                    </div>
+
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    Add Product
+                </button>
+
+            </form>
+
+        </div>
+
+        <div class="table-container">
+
+            {% if products %}
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Product</th>
+                        <th>SKU</th>
+                        <th>Category</th>
+                        <th>Unit</th>
+                        <th>Total Stock</th>
+                        <th>Reorder Level</th>
+                        <th>Status</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                {% for product in products %}
+
+                    <tr>
+
+                        <td>
+                            <strong>{{ product.name }}</strong>
+                        </td>
+
+                        <td>
+                            {{ product.sku }}
+                        </td>
+
+                        <td>
+                            {{ product.category }}
+                        </td>
+
+                        <td>
+                            {{ product.unit }}
+                        </td>
+
+                        <td>
+
+                            {% if product.stock <= 0 %}
+
+                                <span class="stock-out">
+                                    {{ product.stock }}
+                                </span>
+
+                            {% elif product.stock <= product.reorder_level %}
+
+                                <span class="stock-low">
+                                    {{ product.stock }}
+                                </span>
+
+                            {% else %}
+
+                                <span class="stock-good">
+                                    {{ product.stock }}
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+                            {{ product.reorder_level }}
+                        </td>
+
+                        <td>
+
+                            {% if product.stock <= 0 %}
+
+                                <span class="badge" style="background:#ead5d1;color:#805952;">
+                                    Out of Stock
+                                </span>
+
+                            {% elif product.stock <= product.reorder_level %}
+
+                                <span class="badge" style="background:#eadcc3;color:#806a45;">
+                                    Low Stock
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge">
+                                    In Stock
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+            {% else %}
+
+                <div class="empty">
+                    No products available yet.
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

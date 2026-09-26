@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - StockSense</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #eee8df;
+            color: #41473d;
+        }
+
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background: #596653;
+            color: #f7f4ed;
+            position: fixed;
+            left: 0;
+            top: 0;
+            padding: 20px 15px;
+            overflow-y: auto;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 5px 10px 25px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: #c5d0bd;
+            color: #4d5b47;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 19px;
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: bold;
+            color: #faf7f0;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 5px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 11px 12px;
+            border-radius: 8px;
+            color: #e7e5dc;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .sidebar-menu a:hover {
+            background: #657160;
+            color: #fff;
+        }
+
+        .sidebar-menu a.active {
+            background: #c5d0bd;
+            color: #465342;
+            font-weight: 600;
+        }
+
+        .menu-title {
+            color: #c5cabb;
+            font-size: 11px;
+            text-transform: uppercase;
+            margin: 22px 12px 9px;
+            letter-spacing: .7px;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            min-height: 100vh;
+        }
+
+        .topbar {
+            height: 70px;
+            background: #faf6ef;
+            border-bottom: 1px solid #d6cec1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 28px;
+        }
+
+        .page-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #41473d;
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: #c5d0bd;
+            color: #4d5b47;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
+            color: #41473d;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .user-role {
+            color: #77766d;
+            font-size: 11px;
+        }
+
+        .content {
+            padding: 28px;
+        }
+
+        .page-header {
+            margin-bottom: 22px;
+        }
+
+        .page-header h1 {
+            color: #41473d;
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .page-header p {
+            color: #77766d;
+            font-size: 13px;
+        }
+
+        .settings-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .card {
+            background: #faf6ef;
+            border: 1px solid #d6cec1;
+            border-radius: 14px;
+            padding: 22px;
+            box-shadow: 0 5px 16px rgba(70,65,55,.07);
+        }
+
+        .card-title {
+            color: #4c5547;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .card-description {
+            color: #77766d;
+            font-size: 12px;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .setting-item {
+            padding: 15px 0;
+            border-top: 1px solid #e4ddd3;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .setting-item:first-of-type {
+            border-top: none;
+        }
+
+        .setting-info h3 {
+            color: #4c5547;
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
+        .setting-info p {
+            color: #858278;
+            font-size: 11px;
+            line-height: 1.4;
+        }
+
+        .select-box {
+            padding: 9px 12px;
+            border: 1px solid #cfc6b8;
+            border-radius: 8px;
+            background: #f1ece4;
+            color: #41473d;
+            font-size: 12px;
+            outline: none;
+        }
+
+        .select-box:focus {
+            border-color: #98aa8e;
+        }
+
+        .toggle {
+            position: relative;
+            width: 42px;
+            height: 23px;
+            flex-shrink: 0;
+        }
+
+        .toggle input {
+            display: none;
+        }
+
+        .slider {
+            position: absolute;
+            inset: 0;
+            background: #d5cec3;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .slider:before {
+            content: "";
+            position: absolute;
+            width: 17px;
+            height: 17px;
+            left: 3px;
+            top: 3px;
+            background: #faf6ef;
+            border-radius: 50%;
+            transition: .2s;
+            box-shadow: 0 1px 3px rgba(0,0,0,.15);
+        }
+
+        .toggle input:checked + .slider {
+            background: #98aa8e;
+        }
+
+        .toggle input:checked + .slider:before {
+            transform: translateX(19px);
+        }
+
+        .about-box {
+            background: #e1dbd1;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 10px;
+        }
+
+        .about-box p {
+            color: #65685f;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .version {
+            color: #77766d;
+            font-size: 11px;
+            margin-top: 10px;
+        }
+
+        .btn {
+            margin-top: 18px;
+            padding: 10px 18px;
+            border: none;
+            border-radius: 8px;
+            background: #98aa8e;
+            color: #364132;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #899b80;
+        }
+
+        .notice {
+            margin-top: 20px;
+            padding: 13px 15px;
+            background: #eadfc9;
+            color: #806b49;
+            border: 1px solid #dcccaf;
+            border-radius: 9px;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 900px) {
+            .settings-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .content {
+                padding: 20px 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="sidebar">
+
+    <div class="logo-section">
+        <div class="logo-icon">S</div>
+        <div class="logo-text">StockSense</div>
+    </div>
+
+    <ul class="sidebar-menu">
+
+        <li>
+            <a href="{{ url_for('dashboard') }}">
+                📊 Dashboard
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('products') }}">
+                📦 Products
+            </a>
+        </li>
+
+        <div class="menu-title">Operations</div>
+
+        <li>
+            <a href="{{ url_for('receipts') }}">
+                📥 Receipts
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('deliveries') }}">
+                📤 Delivery Orders
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('transfers') }}">
+                🔄 Internal Transfers
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('adjustments') }}">
+                📝 Inventory Adjustment
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('ledger') }}">
+                📚 Move History
+            </a>
+        </li>
+
+        <div class="menu-title">Management</div>
+
+        <li>
+            <a href="{{ url_for('warehouses') }}">
+                🏭 Warehouses
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('settings') }}" class="active">
+                ⚙️ Settings
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('profile') }}">
+                👤 My Profile
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('logout') }}">
+                🚪 Logout
+            </a>
+        </li>
+
+    </ul>
+
+</div>
+
+<div class="main-content">
+
+    <div class="topbar">
+
+        <div class="page-title">
+            Settings
+        </div>
+
+        <div class="user-section">
+
+            <div class="user-avatar">
+                {{ session.get('user_name', 'A')[0]|upper }}
+            </div>
+
+            <div class="user-info">
+
+                <div class="user-name">
+                    {{ session.get('user_name', 'Admin') }}
+                </div>
+
+                <div class="user-role">
+                    {{ session.get('user_role', 'Inventory Manager') }}
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="content">
+
+        <div class="page-header">
+
+            <h1>System Settings</h1>
+
+            <p>
+                Manage your StockSense preferences and system configuration.
+            </p>
+
+        </div>
+
+        <div class="settings-grid">
+
+            <!-- GENERAL SETTINGS -->
+
+            <div class="card">
+
+                <div class="card-title">
+                    General Settings
+                </div>
+
+                <div class="card-description">
+                    Configure the basic preferences for your inventory system.
+                </div>
+
+                <div class="setting-item">
+
+                    <div class="setting-info">
+
+                        <h3>Currency</h3>
+
+                        <p>
+                            Currency used for inventory values.
+                        </p>
+
+                    </div>
+
+                    <select class="select-box">
+                        <option>INR (₹)</option>
+                        <option>USD ($)</option>
+                        <option>EUR (€)</option>
+                    </select>
+
+                </div>
+
+                <div class="setting-item">
+
+                    <div class="setting-info">
+
+                        <h3>Date Format</h3>
+
+                        <p>
+                            Format used when displaying dates.
+                        </p>
+
+                    </div>
+
+                    <select class="select-box">
+                        <option>DD/MM/YYYY</option>
+                        <option>MM/DD/YYYY</option>
+                        <option>YYYY-MM-DD</option>
+                    </select>
+
+                </div>
+
+                <div class="setting-item">
+
+                    <div class="setting-info">
+
+                        <h3>Low Stock Alerts</h3>
+
+                        <p>
+                            Show alerts when products reach reorder level.
+                        </p>
+
+                    </div>
+
+                    <label class="toggle">
+
+                        <input type="checkbox" checked>
+
+                        <span class="slider"></span>
+
+                    </label>
+
+                </div>
+
+            </div>
+
+            <!-- NOTIFICATIONS -->
+
+            <div class="card">
+
+                <div class="card-title">
+                    Notifications
+                </div>
+
+                <div class="card-description">
+                    Control inventory-related notifications.
+                </div>
+
+                <div class="setting-item">
+
+                    <div class="setting-info">
+
+                        <h3>Receipt Notifications</h3>
+
+                        <p>
+                            Notify when incoming stock is received.
+                        </p>
+
+                    </div>
+
+                    <label class="toggle">
+
+                        <input type="checkbox" checked>
+
+                        <span class="slider"></span>
+
+                    </label>
+
+                </div>
+
+                <div class="setting-item">
+
+                    <div class="setting-info">
+
+                        <h3>Delivery Notifications</h3>
+
+                        <p>
+                            Notify when delivery orders are processed.
+                        </p>
+
+                    </div>
+
+                    <label class="toggle">
+
+                        <input type="checkbox" checked>
+
+                        <span class="slider"></span>
+
+                    </label>
+
+                </div>
+
+                <div class="setting-item">
+
+                    <div class="setting-info">
+
+                        <h3>Transfer Notifications</h3>
+
+                        <p>
+                            Notify when internal transfers are completed.
+                        </p>
+
+                    </div>
+
+                    <label class="toggle">
+
+                        <input type="checkbox" checked>
+
+                        <span class="slider"></span>
+
+                    </label>
+
+                </div>
+
+            </div>
+
+            <!-- INVENTORY SETTINGS -->
+
+            <div class="card">
+
+                <div class="card-title">
+                    Inventory Settings
+                </div>
+
+                <div class="card-description">
+                    Configure how stock information is handled.
+                </div>
+
+                <div class="setting-item">
+
+                    <div class="setting-info">
+
+                        <h3>Default Unit</h3>
+
+                        <p>
+                            Default unit when adding a new product.
+                        </p>
+
+                    </div>
+
+                    <select class="select-box">
+                        <option>Pieces</option>
+                        <option>Kg</option>
+                        <option>Litres</option>
+                        <option>Boxes</option>
+                    </select>
+
+                </div>
+
+                <div class="setting-item">
+
+                    <div class="setting-info">
+
+                        <h3>Automatic Stock Tracking</h3>
+
+                        <p>
+                            Update stock automatically after validation.
+                        </p>
+
+                    </div>
+
+                    <label class="toggle">
+
+                        <input type="checkbox" checked>
+
+                        <span class="slider"></span>
+
+                    </label>
+
+                </div>
+
+                <div class="setting-item">
+
+                    <div class="setting-info">
+
+                        <h3>Ledger Tracking</h3>
+
+                        <p>
+                            Record inventory movements in Move History.
+                        </p>
+
+                    </div>
+
+                    <label class="toggle">
+
+                        <input type="checkbox" checked>
+
+                        <span class="slider"></span>
+
+                    </label>
+
+                </div>
+
+            </div>
+
+            <!-- ABOUT -->
+
+            <div class="card">
+
+                <div class="card-title">
+                    About StockSense
+                </div>
+
+                <div class="card-description">
+                    Inventory management system information.
+                </div>
+
+                <div class="about-box">
+
+                    <p>
+                        StockSense helps manage products, warehouses,
+                        receipts, delivery orders, internal transfers,
+                        inventory adjustments and stock history from one
+                        centralized dashboard.
+                    </p>
+
+                </div>
+
+                <div class="version">
+                    Version 1.0
+                </div>
+
+                <button class="btn" type="button">
+                    Settings Saved
+                </button>
+
+            </div>
+
+        </div>
+
+        <div class="notice">
+            These settings are currently used as interface preferences.
+            Inventory transactions such as receipts, deliveries,
+            transfers and adjustments are handled directly through
+            their respective modules.
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

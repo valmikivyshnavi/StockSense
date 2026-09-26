@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - StockSense</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #eee8df;
+            color: #41473d;
+        }
+
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background: #596653;
+            color: #f7f4ed;
+            position: fixed;
+            left: 0;
+            top: 0;
+            padding: 20px 15px;
+            overflow-y: auto;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 5px 10px 25px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: #c5d0bd;
+            color: #4d5b47;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 19px;
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: bold;
+            color: #faf7f0;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 5px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 11px 12px;
+            border-radius: 8px;
+            color: #e7e5dc;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .sidebar-menu a:hover {
+            background: #657160;
+            color: #fff;
+        }
+
+        .sidebar-menu a.active {
+            background: #c5d0bd;
+            color: #465342;
+            font-weight: 600;
+        }
+
+        .menu-title {
+            color: #c5cabb;
+            font-size: 11px;
+            text-transform: uppercase;
+            margin: 22px 12px 9px;
+            letter-spacing: .7px;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            min-height: 100vh;
+        }
+
+        .topbar {
+            height: 70px;
+            background: #faf6ef;
+            border-bottom: 1px solid #d6cec1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 28px;
+        }
+
+        .page-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #41473d;
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: #c5d0bd;
+            color: #4d5b47;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
+            color: #41473d;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .user-role {
+            color: #77766d;
+            font-size: 11px;
+        }
+
+        .content {
+            padding: 28px;
+        }
+
+        .page-header {
+            margin-bottom: 22px;
+        }
+
+        .page-header h1 {
+            color: #41473d;
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .page-header p {
+            color: #77766d;
+            font-size: 13px;
+        }
+
+        .profile-layout {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 22px;
+            align-items: start;
+        }
+
+        .card {
+            background: #faf6ef;
+            border: 1px solid #d6cec1;
+            border-radius: 14px;
+            padding: 22px;
+            box-shadow: 0 5px 16px rgba(70,65,55,.07);
+        }
+
+        .profile-card {
+            text-align: center;
+        }
+
+        .large-avatar {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: #c5d0bd;
+            color: #4d5b47;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 34px;
+            font-weight: bold;
+            margin: 5px auto 15px;
+        }
+
+        .profile-name {
+            color: #41473d;
+            font-size: 19px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .profile-role {
+            color: #77766d;
+            font-size: 12px;
+        }
+
+        .profile-divider {
+            height: 1px;
+            background: #e4ddd3;
+            margin: 20px 0;
+        }
+
+        .profile-info {
+            text-align: left;
+        }
+
+        .info-row {
+            margin-bottom: 15px;
+        }
+
+        .info-label {
+            color: #858278;
+            font-size: 11px;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            color: #50544b;
+            font-size: 13px;
+            font-weight: 600;
+            word-break: break-word;
+        }
+
+        .card-title {
+            color: #4c5547;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 18px;
+        }
+
+        .form-group {
+            margin-bottom: 17px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            color: #55584f;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 11px 13px;
+            border: 1px solid #cfc6b8;
+            border-radius: 8px;
+            background: #f1ece4;
+            color: #41473d;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: #98aa8e;
+            background: #faf6ef;
+            box-shadow: 0 0 0 3px rgba(152,170,142,.15);
+        }
+
+        .form-group input:disabled {
+            color: #77766d;
+            cursor: not-allowed;
+        }
+
+        .note {
+            color: #858278;
+            font-size: 11px;
+            margin-top: 6px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 18px;
+            border: none;
+            border-radius: 8px;
+            background: #98aa8e;
+            color: #364132;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background: #899b80;
+        }
+
+        .account-box {
+            margin-top: 22px;
+            background: #e1dbd1;
+            border-radius: 10px;
+            padding: 16px;
+        }
+
+        .account-box h3 {
+            color: #55584f;
+            font-size: 13px;
+            margin-bottom: 7px;
+        }
+
+        .account-box p {
+            color: #77766d;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        .logout-btn {
+            display: inline-block;
+            margin-top: 14px;
+            padding: 9px 15px;
+            background: #ead5d1;
+            color: #805952;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .logout-btn:hover {
+            background: #dfc4be;
+        }
+
+        @media (max-width: 850px) {
+            .profile-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .content {
+                padding: 20px 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="sidebar">
+
+    <div class="logo-section">
+        <div class="logo-icon">S</div>
+        <div class="logo-text">StockSense</div>
+    </div>
+
+    <ul class="sidebar-menu">
+
+        <li>
+            <a href="{{ url_for('dashboard') }}">
+                📊 Dashboard
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('products') }}">
+                📦 Products
+            </a>
+        </li>
+
+        <div class="menu-title">Operations</div>
+
+        <li>
+            <a href="{{ url_for('receipts') }}">
+                📥 Receipts
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('deliveries') }}">
+                📤 Delivery Orders
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('transfers') }}">
+                🔄 Internal Transfers
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('adjustments') }}">
+                📝 Inventory Adjustment
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('ledger') }}">
+                📚 Move History
+            </a>
+        </li>
+
+        <div class="menu-title">Management</div>
+
+        <li>
+            <a href="{{ url_for('warehouses') }}">
+                🏭 Warehouses
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('settings') }}">
+                ⚙️ Settings
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('profile') }}" class="active">
+                👤 My Profile
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('logout') }}">
+                🚪 Logout
+            </a>
+        </li>
+
+    </ul>
+
+</div>
+
+<div class="main-content">
+
+    <div class="topbar">
+
+        <div class="page-title">
+            My Profile
+        </div>
+
+        <div class="user-section">
+
+            <div class="user-avatar">
+                {{ session.get('user_name', 'A')[0]|upper }}
+            </div>
+
+            <div class="user-info">
+
+                <div class="user-name">
+                    {{ session.get('user_name', 'Admin') }}
+                </div>
+
+                <div class="user-role">
+                    {{ session.get('user_role', 'Inventory Manager') }}
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="content">
+
+        <div class="page-header">
+
+            <h1>My Profile</h1>
+
+            <p>
+                View your StockSense account information.
+            </p>
+
+        </div>
+
+        <div class="profile-layout">
+
+            <!-- PROFILE SUMMARY -->
+
+            <div class="card profile-card">
+
+                <div class="large-avatar">
+                    {{ session.get('user_name', 'A')[0]|upper }}
+                </div>
+
+                <div class="profile-name">
+                    {{ session.get('user_name', 'Admin') }}
+                </div>
+
+                <div class="profile-role">
+                    {{ session.get('user_role', 'Inventory Manager') }}
+                </div>
+
+                <div class="profile-divider"></div>
+
+                <div class="profile-info">
+
+                    <div class="info-row">
+
+                        <div class="info-label">
+                            Email
+                        </div>
+
+                        <div class="info-value">
+                            {{ session.get('user_email', 'Not available') }}
+                        </div>
+
+                    </div>
+
+                    <div class="info-row">
+
+                        <div class="info-label">
+                            Role
+                        </div>
+
+                        <div class="info-value">
+                            {{ session.get('user_role', 'Inventory Manager') }}
+                        </div>
+
+                    </div>
+
+                    <div class="info-row">
+
+                        <div class="info-label">
+                            Account
+                        </div>
+
+                        <div class="info-value">
+                            Active
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- ACCOUNT DETAILS -->
+
+            <div class="card">
+
+                <div class="card-title">
+                    Account Details
+                </div>
+
+                <div class="form-group">
+
+                    <label>
+                        Full Name
+                    </label>
+
+                    <input
+                        type="text"
+                        value="{{ session.get('user_name', '') }}"
+                        disabled
+                    >
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>
+                        Email Address
+                    </label>
+
+                    <input
+                        type="email"
+                        value="{{ session.get('user_email', '') }}"
+                        disabled
+                    >
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>
+                        Role
+                    </label>
+
+                    <input
+                        type="text"
+                        value="{{ session.get('user_role', 'Inventory Manager') }}"
+                        disabled
+                    >
+
+                </div>
+
+                <div class="note">
+                    Your account details are managed through the StockSense
+                    authentication system.
+                </div>
+
+                <div class="account-box">
+
+                    <h3>
+                        Account Security
+                    </h3>
+
+                    <p>
+                        Keep your login credentials private. If you forget
+                        your password, use the Forgot Password option on
+                        the login page to reset it using OTP verification.
+                    </p>
+
+                    <a
+                        href="{{ url_for('logout') }}"
+                        class="logout-btn"
+                    >
+                        🚪 Logout from StockSense
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
