@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login - StockSense</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #eee8df;
+            color: #41473d;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 420px;
+            padding: 20px;
+        }
+
+        .login-card {
+            background: #faf6ef;
+            border: 1px solid #d6cec1;
+            border-radius: 18px;
+            padding: 38px;
+            box-shadow: 0 10px 30px rgba(70, 65, 55, 0.10);
+        }
+
+        .logo {
+            width: 58px;
+            height: 58px;
+            margin: 0 auto 16px;
+            border-radius: 15px;
+            background: #c5d0bd;
+            color: #4d5b47;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        h1 {
+            text-align: center;
+            color: #4b5747;
+            font-size: 27px;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #77766d;
+            font-size: 14px;
+            margin-bottom: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 17px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #55584f;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1px solid #cfc6b8;
+            border-radius: 9px;
+            background: #f1ece4;
+            color: #41473d;
+            font-size: 14px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #98aa8e;
+            background: #faf6ef;
+            box-shadow: 0 0 0 3px rgba(152, 170, 142, 0.15);
+        }
+
+        .forgot {
+            text-align: right;
+            margin-top: -7px;
+            margin-bottom: 20px;
+        }
+
+        .forgot a {
+            color: #64745c;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .forgot a:hover {
+            text-decoration: underline;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 9px;
+            background: #98aa8e;
+            color: #364132;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .login-btn:hover {
+            background: #899b80;
+        }
+
+        .flash {
+            padding: 11px 13px;
+            border-radius: 9px;
+            margin-bottom: 15px;
+            font-size: 13px;
+            background: #ead5d1;
+            color: #805952;
+            border: 1px solid #dbc0bb;
+        }
+
+        .signup-link {
+            text-align: center;
+            margin-top: 22px;
+            font-size: 14px;
+            color: #77766d;
+        }
+
+        .signup-link a {
+            color: #64745c;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .signup-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="login-container">
+
+    <div class="login-card">
+
+        <div class="logo">S</div>
+
+        <h1>Welcome Back</h1>
+
+        <p class="subtitle">
+            Login to your StockSense account
+        </p>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="flash">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="{{ url_for('login') }}">
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Enter your email"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Enter your password"
+                    required
+                >
+            </div>
+
+            <div class="forgot">
+                <a href="{{ url_for('forgot_password') }}">
+                    Forgot Password?
+                </a>
+            </div>
+
+            <button type="submit" class="login-btn">
+                Login
+            </button>
+
+        </form>
+
+        <div class="signup-link">
+            Don't have an account?
+            <a href="{{ url_for('signup') }}">Create an account</a>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

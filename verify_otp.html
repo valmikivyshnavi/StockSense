@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Verify OTP - StockSense</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #eee8df;
+            color: #41473d;
+        }
+
+        .otp-container {
+            width: 100%;
+            max-width: 420px;
+            padding: 20px;
+        }
+
+        .otp-card {
+            background: #faf6ef;
+            border: 1px solid #d6cec1;
+            border-radius: 18px;
+            padding: 38px;
+            box-shadow: 0 10px 30px rgba(70, 65, 55, 0.10);
+        }
+
+        .logo {
+            width: 58px;
+            height: 58px;
+            margin: 0 auto 16px;
+            border-radius: 15px;
+            background: #c5d0bd;
+            color: #4d5b47;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        h1 {
+            text-align: center;
+            color: #4b5747;
+            font-size: 27px;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #77766d;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 25px;
+        }
+
+        .demo-otp {
+            background: #e1e6dc;
+            border: 1px solid #c7d1bf;
+            border-radius: 10px;
+            padding: 13px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .demo-otp-label {
+            display: block;
+            color: #77766d;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+
+        .demo-otp-code {
+            color: #4f6049;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 4px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #55584f;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1px solid #cfc6b8;
+            border-radius: 9px;
+            background: #f1ece4;
+            color: #41473d;
+            font-size: 18px;
+            text-align: center;
+            letter-spacing: 5px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #98aa8e;
+            background: #faf6ef;
+            box-shadow: 0 0 0 3px rgba(152, 170, 142, 0.15);
+        }
+
+        .verify-btn {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 9px;
+            background: #98aa8e;
+            color: #364132;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .verify-btn:hover {
+            background: #899b80;
+        }
+
+        .flash {
+            padding: 11px 13px;
+            border-radius: 9px;
+            margin-bottom: 15px;
+            font-size: 13px;
+            background: #ead5d1;
+            color: #805952;
+            border: 1px solid #dbc0bb;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 22px;
+            font-size: 14px;
+        }
+
+        .back-link a {
+            color: #64745c;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+
+        .note {
+            text-align: center;
+            color: #8a877e;
+            font-size: 11px;
+            margin-top: 14px;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="otp-container">
+
+    <div class="otp-card">
+
+        <div class="logo">S</div>
+
+        <h1>Verify OTP</h1>
+
+        <p class="subtitle">
+            Enter the OTP to continue resetting your password.
+        </p>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="flash">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% if demo_otp %}
+            <div class="demo-otp">
+                <span class="demo-otp-label">
+                    Demo OTP
+                </span>
+
+                <span class="demo-otp-code">
+                    {{ demo_otp }}
+                </span>
+            </div>
+        {% endif %}
+
+        <form method="POST" action="{{ url_for('verify_otp') }}">
+
+            <div class="form-group">
+                <label for="otp">Enter OTP</label>
+
+                <input
+                    type="text"
+                    id="otp"
+                    name="otp"
+                    placeholder="000000"
+                    maxlength="6"
+                    inputmode="numeric"
+                    autocomplete="one-time-code"
+                    required
+                >
+            </div>
+
+            <button type="submit" class="verify-btn">
+                Verify OTP
+            </button>
+
+        </form>
+
+        <div class="back-link">
+            <a href="{{ url_for('forgot_password') }}">
+                ← Back
+            </a>
+        </div>
+
+        <p class="note">
+            This is a demo OTP displayed locally.
+        </p>
+
+    </div>
+
+</div>
+
+</body>
+</html>
