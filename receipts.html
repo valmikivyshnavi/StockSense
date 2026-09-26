@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receipts - StockSense</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #eee8df;
+            color: #41473d;
+        }
+
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background: #596653;
+            color: #f7f4ed;
+            position: fixed;
+            left: 0;
+            top: 0;
+            padding: 20px 15px;
+            overflow-y: auto;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 5px 10px 25px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: #c5d0bd;
+            color: #4d5b47;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 19px;
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: bold;
+            color: #faf7f0;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 5px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 11px 12px;
+            border-radius: 8px;
+            color: #e7e5dc;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .sidebar-menu a:hover {
+            background: #657160;
+            color: #fff;
+        }
+
+        .sidebar-menu a.active {
+            background: #c5d0bd;
+            color: #465342;
+            font-weight: 600;
+        }
+
+        .menu-title {
+            color: #c5cabb;
+            font-size: 11px;
+            text-transform: uppercase;
+            margin: 22px 12px 9px;
+            letter-spacing: .7px;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            min-height: 100vh;
+        }
+
+        .topbar {
+            height: 70px;
+            background: #faf6ef;
+            border-bottom: 1px solid #d6cec1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 28px;
+        }
+
+        .page-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #41473d;
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: #c5d0bd;
+            color: #4d5b47;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
+            color: #41473d;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .user-role {
+            color: #77766d;
+            font-size: 11px;
+        }
+
+        .content {
+            padding: 28px;
+        }
+
+        .page-header {
+            margin-bottom: 22px;
+        }
+
+        .page-header h1 {
+            color: #41473d;
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .page-header p {
+            color: #77766d;
+            font-size: 13px;
+        }
+
+        .card {
+            background: #faf6ef;
+            border: 1px solid #d6cec1;
+            border-radius: 14px;
+            padding: 22px;
+            box-shadow: 0 5px 16px rgba(70,65,55,.06);
+            margin-bottom: 22px;
+        }
+
+        .card h2 {
+            font-size: 16px;
+            color: #4c5547;
+            margin-bottom: 18px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            color: #55584f;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 11px 13px;
+            border: 1px solid #cfc6b8;
+            border-radius: 8px;
+            background: #f1ece4;
+            color: #41473d;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #98aa8e;
+            background: #faf6ef;
+            box-shadow: 0 0 0 3px rgba(152,170,142,.15);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: #98aa8e;
+            color: #364132;
+        }
+
+        .btn-primary:hover {
+            background: #899b80;
+        }
+
+        .btn-success {
+            background: #a9bea0;
+            color: #40503b;
+        }
+
+        .btn-success:hover {
+            background: #97ae8d;
+        }
+
+        .table-container {
+            background: #faf6ef;
+            border: 1px solid #d6cec1;
+            border-radius: 14px;
+            overflow-x: auto;
+            box-shadow: 0 5px 16px rgba(70,65,55,.06);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 850px;
+        }
+
+        thead {
+            background: #e1dbd1;
+        }
+
+        th {
+            padding: 13px 15px;
+            text-align: left;
+            color: #55584f;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 13px 15px;
+            border-top: 1px solid #e4ddd3;
+            color: #50544b;
+            font-size: 13px;
+        }
+
+        tbody tr:hover {
+            background: #f2ede5;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .status-draft {
+            background: #e2ddd4;
+            color: #706b62;
+        }
+
+        .status-waiting {
+            background: #eadcc3;
+            color: #806a45;
+        }
+
+        .status-ready {
+            background: #d3dfcc;
+            color: #53654d;
+        }
+
+        .status-done {
+            background: #cbdcc5;
+            color: #4d6248;
+        }
+
+        .status-canceled {
+            background: #e6cfca;
+            color: #825b55;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 45px 20px;
+            color: #858278;
+            font-size: 13px;
+        }
+
+        .alert {
+            padding: 12px 14px;
+            border-radius: 9px;
+            margin-bottom: 15px;
+            font-size: 13px;
+        }
+
+        .alert-success {
+            background: #d8e3d3;
+            color: #506247;
+            border: 1px solid #c2d1bc;
+        }
+
+        .alert-danger {
+            background: #ead5d1;
+            color: #805952;
+            border: 1px solid #dbc0bb;
+        }
+
+        @media (max-width: 900px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .content {
+                padding: 20px 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="sidebar">
+
+    <div class="logo-section">
+        <div class="logo-icon">S</div>
+        <div class="logo-text">StockSense</div>
+    </div>
+
+    <ul class="sidebar-menu">
+
+        <li>
+            <a href="{{ url_for('dashboard') }}">
+                📊 Dashboard
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('products') }}">
+                📦 Products
+            </a>
+        </li>
+
+        <div class="menu-title">Operations</div>
+
+        <li>
+            <a href="{{ url_for('receipts') }}" class="active">
+                📥 Receipts
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('deliveries') }}">
+                📤 Delivery Orders
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('transfers') }}">
+                🔄 Internal Transfers
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('adjustments') }}">
+                📝 Inventory Adjustment
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('ledger') }}">
+                📚 Move History
+            </a>
+        </li>
+
+        <div class="menu-title">Management</div>
+
+        <li>
+            <a href="{{ url_for('warehouses') }}">
+                🏭 Warehouses
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('settings') }}">
+                ⚙️ Settings
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('profile') }}">
+                👤 My Profile
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('logout') }}">
+                🚪 Logout
+            </a>
+        </li>
+
+    </ul>
+
+</div>
+
+<div class="main-content">
+
+    <div class="topbar">
+
+        <div class="page-title">
+            Receipts
+        </div>
+
+        <div class="user-section">
+
+            <div class="user-avatar">
+                {{ session.get('user_name', 'A')[0]|upper }}
+            </div>
+
+            <div class="user-info">
+
+                <div class="user-name">
+                    {{ session.get('user_name', 'Admin') }}
+                </div>
+
+                <div class="user-role">
+                    {{ session.get('user_role', 'Inventory Manager') }}
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="content">
+
+        <div class="page-header">
+
+            <h1>Receipts</h1>
+
+            <p>
+                Record incoming stock from suppliers and validate receipts.
+            </p>
+
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+
+            {% if messages %}
+
+                {% for category, message in messages %}
+
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+
+                {% endfor %}
+
+            {% endif %}
+
+        {% endwith %}
+
+
+        <div class="card">
+
+            <h2>Create Receipt</h2>
+
+            <form method="POST" action="{{ url_for('receipts') }}">
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label for="receipt_number">
+                            Receipt Number
+                        </label>
+
+                        <input
+                            type="text"
+                            id="receipt_number"
+                            name="receipt_number"
+                            placeholder="Example: REC-001"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="supplier">
+                            Supplier
+                        </label>
+
+                        <input
+                            type="text"
+                            id="supplier"
+                            name="supplier"
+                            placeholder="Enter supplier name"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label for="product_id">
+                            Product
+                        </label>
+
+                        <select
+                            id="product_id"
+                            name="product_id"
+                            required
+                        >
+
+                            <option value="">
+                                Select Product
+                            </option>
+
+                            {% for product in products %}
+
+                                <option value="{{ product.id }}">
+                                    {{ product.name }} - {{ product.sku }}
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="warehouse_id">
+                            Warehouse
+                        </label>
+
+                        <select
+                            id="warehouse_id"
+                            name="warehouse_id"
+                        >
+
+                            <option value="">
+                                Select Warehouse
+                            </option>
+
+                            {% for warehouse in warehouses %}
+
+                                <option value="{{ warehouse.id }}">
+                                    {{ warehouse.name }} ({{ warehouse.code }})
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label for="quantity">
+                            Quantity
+                        </label>
+
+                        <input
+                            type="number"
+                            id="quantity"
+                            name="quantity"
+                            step="0.01"
+                            min="0.01"
+                            placeholder="Enter quantity"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+                    Create Receipt
+                </button>
+
+            </form>
+
+        </div>
+
+
+        <div class="table-container">
+
+            {% if receipts %}
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Receipt No.</th>
+                        <th>Supplier</th>
+                        <th>Product</th>
+                        <th>Warehouse</th>
+                        <th>Quantity</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                {% for receipt in receipts %}
+
+                    <tr>
+
+                        <td>
+                            <strong>
+                                {{ receipt.receipt_number }}
+                            </strong>
+                        </td>
+
+                        <td>
+                            {{ receipt.supplier }}
+                        </td>
+
+                        <td>
+                            {{ receipt.product_name }}
+                        </td>
+
+                        <td>
+                            {{ receipt.warehouse_name or 'Not specified' }}
+                        </td>
+
+                        <td>
+                            {{ receipt.quantity }}
+                        </td>
+
+                        <td>
+
+                            {% if receipt.status == 'Done' %}
+
+                                <span class="status status-done">
+                                    Done
+                                </span>
+
+                            {% elif receipt.status == 'Ready' %}
+
+                                <span class="status status-ready">
+                                    Ready
+                                </span>
+
+                            {% elif receipt.status == 'Canceled' %}
+
+                                <span class="status status-canceled">
+                                    Canceled
+                                </span>
+
+                            {% elif receipt.status == 'Draft' %}
+
+                                <span class="status status-draft">
+                                    Draft
+                                </span>
+
+                            {% else %}
+
+                                <span class="status status-waiting">
+                                    {{ receipt.status }}
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+
+                            {% if receipt.status != 'Done' and receipt.status != 'Canceled' %}
+
+                                <form
+                                    method="POST"
+                                    action="{{ url_for('validate_receipt', receipt_id=receipt.id) }}"
+                                    style="display:inline;"
+                                >
+
+                                    <button
+                                        type="submit"
+                                        class="btn btn-success"
+                                    >
+                                        Validate
+                                    </button>
+
+                                </form>
+
+                            {% else %}
+
+                                <span style="color:#858278;">
+                                    —
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+            {% else %}
+
+                <div class="empty">
+                    No receipts available yet.
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
